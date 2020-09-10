@@ -62,7 +62,7 @@ class appController extends Controller
         }
         $data['name']=$request->name;
         $data['email']=$request->email;
-        $data['password']=bcrypt($request->password); //use encryption
+        $data['password']=bcrypt($request->password); 
         //dd($data);
         if($request->hasFile('image')){
             $image=$request->file('image');
@@ -102,11 +102,40 @@ Deleted!');
     public function editUser(Request $request){
         $this->data['title']='Edit Student';
         $id=$request->user_id;
-        $editRecord=Student::findOrFail();
-        if($this->deleteImage($id) && Student::findOrFail($id)->delete()){
-            return redirect()->route('homepage')->with('success', 'Record is
-Deleted!');
+        $editRecord=Student::findOrFail($id);
+        return view ('edit_student', compact('editRecord'), $this->data);
+    }
+    
+    public function editAction(Request $request){
+        if ($request->isMethod('get')){
+            return redirect()->back();  
         }
+        if ($request->isMethod('post')){
+            $this->validate($request,[
+                'name'=>'required|min:3',
+                'email'=>'email',
+                'image'=>'mimes:jpeg,jpg,png,gig'
+            ],['name.required'=>'Please enter your name.']);
+        }
+        $data['name']=$request->name;
+        $data['email']=$request->email;
+        $id=$request->student_id;
         
+        //dd($data);
+        if($request->hasFile('image')){
+            $image=$request->file('image');
+            $ext=$image->getClientOriginalExtension();
+            $imageName=Str::random(10).'.'.$ext;
+            $uploadPath=public_path('lib/images/');
+            
+            if($this->deleteImage($id) && $image->move($uploadPath, $imageName)){
+                $data['image']=$imageName;
+            }      
+        }
+
+        if(Student::where('id',$id)->update($data)){
+            return redirect()->route('homepage')->with('success','Record has been edited!');
+        }
+
     }
 }

@@ -69,7 +69,7 @@
                     <td>{{$studentDatum->email}}</td>
                     <td><img src="{{url('lib/images/'.$studentDatum->image)}}" height="30" width="30" alt=""></td>
                     <td>
-                        <a href="" class="btn btn-primary btn-xs">Edit</a>
+                        <a href="{{route('edit').'/'.$studentDatum->id}}" class="btn btn-primary btn-xs">Edit</a>
                         <a href="{{route('delete').'/'.$studentDatum->id}}" class="btn btn-danger btn-xs">Delete</a>
                     </td>
                     <td>{{$studentDatum->created_at->DiffForHumans()}}</td>

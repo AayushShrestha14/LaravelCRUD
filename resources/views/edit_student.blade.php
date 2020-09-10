@@ -1,20 +1,10 @@
 @extends('layouts.master')
 @section('body')
-    <div class="row">
-        <div class="col-md-12">
-            @if(session('success'))
-                <div class="row">
-                    <div class="alert alert-success">
-                        {{session('success')}}
-                    </div>
-                </div>
-            @endif
-        </div>
-    </div>
-    <div class="row">
+<div class="row">
         <div class="col-md-6">
-            <form action="{{route('add')}}" method="POST" enctype="multipart/form-data">
+            <form action="{{route('edit_action')}}" method="POST" enctype="multipart/form-data">
             {{csrf_field()}}
+            <input type="hidden" name="student_id" value="{{$editRecord->id}}">
                 <div class="form-group">
                 <div>
                     <a href="" style="color:red";>{{$errors->first('name')}}</a>
@@ -37,12 +27,12 @@
                     <input type="file" name="image" id="image" class="btn btn-default" >
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary">Update Student</button>
+                    <button class="btn btn-primary"><i class="glyphicon glyphicon-edit"></i> Update Student</button>
                 </div>
             </form>
         </div>
         <div class="col-md-4">
-            <img src="{{url('/lib/images'.$editRecord->image)}}" alt="No image" 
+            <img src="{{url('/lib/images/'.$editRecord->image)}}" alt="No image" class="img-responsive thumbnail" style="margin-top: 20px">
         </div>
     </div>
 @endsection
